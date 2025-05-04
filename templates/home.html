@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comprehensive Heart Disease Prediction Form">
+    <title>Heart Disease Risk Assessment</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .form-container:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+        }
+
+        .form-section-title {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 8px;
+        }
+
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-option input, .checkbox-option input {
+            margin-right: 8px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--success-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #219653;
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group .form-control {
+            flex: 1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-title {
+            color: var(--danger-color);
+            margin-bottom: 15px;
+        }
+
+        .modal-btn {
+            background: var(--secondary-color);
+            margin-top: 20px;
+        }
+
+        .modal-btn:hover {
+            background: #2980b9;
+        }
+
+        .required:after {
+            content: " *";
+            color: var(--danger-color);
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Heart Stroke Risk Assessment</h1>
+            <p class="subtitle">Fill out this comprehensive form to assess your risk of heart stroke</p>
+        </header>
+
+        <div class="form-container">
+            <form id="heartForm" action="res" novalidate>
+                <!-- Personal Information Section -->
+                <div class="form-section">
+                    <h2 class="form-section-title">Personal Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstname" class="required">Full Name</label>
+                            <input type="text" id="firstname" name="firstname" class="form-control" placeholder="Enter your full name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="age" class="required">Age</label>
+                            <input type="number" id="age" name="age" class="form-control" min="18" max="120" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Gender</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="gender" value="1" required> Male
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="gender" value="0" required> Female
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Marital Status</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="maritalstatus" value="1" required> Married
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="maritalstatus" value="2" required> Single
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="maritalstatus" value="0" required> Divorced
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Residence</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="residence" value="1" required> Urban
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="residence" value="0" required> Rural
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Work Type</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="worktype" value="1" required> Never Worked
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="worktype" value="2" required> Private
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="worktype" value="0" required> Government
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="worktype" value="3" required> Self-employed
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health History Section -->
+                <div class="form-section">
+                    <h2 class="form-section-title">Health History</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="required">Heart Disease History</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="heartdisease" value="1" required> Yes
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="heartdisease" value="0" required> No
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Hypertension</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="hypertension" value="1" required> Yes
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="hypertension" value="0" required> No
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Stroke History</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="stroke" value="1" required> Yes
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="stroke" value="0" required> No
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Dizziness</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="Dz" value="1" required> Yes
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="Dz" value="0" required> No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lifestyle Factors Section -->
+                <div class="form-section">
+                    <h2 class="form-section-title">Lifestyle Factors</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="required">Smoking Status</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="smoking" value="1" required> Formerly
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="smoking" value="2" required> Never
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="smoking" value="0" required> Smokes
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Alcohol Intake</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="alcohol" value="1" required> Never
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="alcohol" value="2" required> Rarely
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="alcohol" value="0" required> Frequent
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="alcohol" value="3" required> Social Drinker
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Physical Activity Level</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="physicalactivity" value="0" required> High
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="physicalactivity" value="1" required> Low
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="physicalactivity" value="2" required> Moderate
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical Measurements Section -->
+                <div class="form-section">
+                    <h2 class="form-section-title">Medical Measurements</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="stress" class="required">Stress Level (1-10)</label>
+                            <input type="number" id="stress" name="stress" class="form-control" min="1" max="10" step="0.1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Cholesterol Levels (mg/dL)</label>
+                            <div class="input-group">
+                                <input type="number" name="HDL" class="form-control" placeholder="HDL" step="0.1" required>
+                                <input type="number" name="LDL" class="form-control" placeholder="LDL" step="0.1" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Blood Pressure (mmHg)</label>
+                            <div class="input-group">
+                                <input type="number" name="UBP" class="form-control" placeholder="Systolic" step="1" required>
+                                <input type="number" name="LBP" class="form-control" placeholder="Diastolic" step="1" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="HR" class="required">Resting Heart Rate (bpm)</label>
+                            <input type="number" id="HR" name="HR" class="form-control" step="1" min="30" max="200" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Chest Pain</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="CP" value="3" required> Regular
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="CP" value="0" required> Frequent
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="CP" value="2" required> Occasional
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="CP" value="1" required> None
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="glu" class="required">Glucose Level (mg/dL)</label>
+                            <input type="number" id="glu" name="glu" class="form-control" step="0.1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bmi" class="required">Body Mass Index (BMI)</label>
+                            <input type="number" id="bmi" name="bmi" class="form-control" step="0.1" min="10" max="50" required>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Assess My Heart Disease Risk</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Validation Modal -->
+    <div id="validationModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modalTitle">Validation Error</h3>
+            <p id="modalMessage">Please fill out all required fields.</p>
+            <button class="btn modal-btn" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Form validation
+        document.getElementById('heartForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Reset all error styles first
+            resetValidationStyles();
+            
+            // Validate all fields
+            let isValid = validateAllFields();
+            
+            if (!isValid) {
+                showModal('Validation Error', 'Please correct the highlighted fields.');
+                return false;
+            }
+            
+            // If all valid, submit form
+            this.submit();
+        });
+
+        function validateAllFields() {
+            let isValid = true;
+            
+            // Validate text/number inputs
+            document.querySelectorAll('input[type="text"], input[type="number"]').forEach(input => {
+                if (!input.value.trim()) {
+                    showFieldError(input, 'This field is required');
+                    isValid = false;
+                } else if (input.type === 'number') {
+                    const value = parseFloat(input.value);
+                    if (isNaN(value)) {
+                        showFieldError(input, 'Please enter a valid number');
+                        isValid = false;
+                    } else {
+                        // Validate specific numeric ranges
+                        if (input.id === 'age' && (value < 25 || value > 120)) {
+                            showFieldError(input, 'Age must be between 25 and 120');
+                            isValid = false;
+                        } else if (input.id === 'stress' && (value < 1 || value > 10)) {
+                            showFieldError(input, 'Stress level must be between 1 and 10');
+                            isValid = false;
+                        } else if (input.id === 'HR' && (value < 30 || value > 200)) {
+                            showFieldError(input, 'Heart rate must be between 30 and 200 bpm');
+                            isValid = false;
+                        } else if (input.id === 'bmi' && (value < 10 || value > 50)) {
+                            showFieldError(input, 'BMI must be between 10 and 50');
+                            isValid = false;
+                        } else if (input.name === 'HDL' && value <= 0) {
+                            showFieldError(input, 'HDL must be a positive number');
+                            isValid = false;
+                        } else if (input.name === 'LDL' && value <= 0) {
+                            showFieldError(input, 'LDL must be a positive number');
+                            isValid = false;
+                        } else if (input.name === 'UBP' && (value < 50 || value > 250)) {
+                            showFieldError(input, 'Systolic BP must be between 50 and 250 mmHg');
+                            isValid = false;
+                        } else if (input.name === 'LBP' && (value < 30 || value > 150)) {
+                            showFieldError(input, 'Diastolic BP must be between 30 and 150 mmHg');
+                            isValid = false;
+                        } else if (input.id === 'glu' && (value < 20 || value > 500)) {
+                            showFieldError(input, 'Glucose level must be between 20 and 500 mg/dL');
+                            isValid = false;
+                        }
+                    }
+                }
+            });
+            
+            // Validate radio groups
+            document.querySelectorAll('.radio-group').forEach(group => {
+                const name = group.querySelector('input[type="radio"]').name;
+                const checked = document.querySelector(`input[name="${name}"]:checked`);
+                if (!checked) {
+                    showRadioGroupError(group);
+                    isValid = false;
+                }
+            });
+            
+            return isValid;
+        }
+
+        function showFieldError(field, message = 'This field is required') {
+            field.style.borderColor = 'var(--danger-color)';
+            
+            // Create or update error message
+            let errorElement = field.nextElementSibling;
+            if (!errorElement || !errorElement.classList.contains('error-message')) {
+                errorElement = document.createElement('div');
+                errorElement.className = 'error-message';
+                field.parentNode.insertBefore(errorElement, field.nextSibling);
+            }
+            errorElement.textContent = message;
+        }
+
+        function showRadioGroupError(group) {
+            group.style.border = '1px solid var(--danger-color)';
+            group.style.padding = '5px';
+            group.style.borderRadius = 'var(--border-radius)';
+            
+            // Create or update error message
+            let errorElement = group.nextElementSibling;
+            if (!errorElement || !errorElement.classList.contains('error-message')) {
+                errorElement = document.createElement('div');
+                errorElement.className = 'error-message';
+                group.parentNode.insertBefore(errorElement, group.nextSibling);
+            }
+            errorElement.textContent = 'This selection is required';
+        }
+
+        function resetValidationStyles() {
+            // Reset input fields
+            document.querySelectorAll('.form-control').forEach(field => {
+                field.style.borderColor = '';
+                const errorElement = field.nextElementSibling;
+                if (errorElement && errorElement.classList.contains('error-message')) {
+                    errorElement.remove();
+                }
+            });
+            
+            // Reset radio groups
+            document.querySelectorAll('.radio-group').forEach(group => {
+                group.style.border = '';
+                group.style.padding = '';
+                const errorElement = group.nextElementSibling;
+                if (errorElement && errorElement.classList.contains('error-message')) {
+                    errorElement.remove();
+                }
+            });
+        }
+
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('validationModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('validationModal').style.display = 'none';
+        }
+
+        // Real-time validation for input fields
+        document.querySelectorAll('.form-control').forEach(field => {
+            field.addEventListener('input', function() {
+                this.style.borderColor = '';
+                const errorElement = this.nextElementSibling;
+                if (errorElement && errorElement.classList.contains('error-message')) {
+                    errorElement.remove();
+                }
+            });
+        });
+
+        // Real-time validation for radio buttons
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const radioGroup = this.closest('.radio-group');
+                radioGroup.style.border = '';
+                radioGroup.style.padding = '';
+                const errorElement = radioGroup.nextElementSibling;
+                if (errorElement && errorElement.classList.contains('error-message')) {
+                    errorElement.remove();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
