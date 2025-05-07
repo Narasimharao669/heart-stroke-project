@@ -96,23 +96,7 @@
     {% endif %}
     {% endif %}
     
-    <h3>Model Breakdown</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Model</th>
-          <th>Risk Probability</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for name, value in risk_assessment.model_breakdown.items %}
-        <tr>
-          <td>{{ name }}</td>
-          <td>{{ value }}%</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    
     
     <a href="/" class="btn btn-primary">Back to Assessment</a>
   </div>
