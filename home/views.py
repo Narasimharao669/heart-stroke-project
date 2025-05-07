@@ -61,7 +61,7 @@ def res(request):
 def calculate_risk_assessment(model_probs):
     RISK_THRESHOLDS = {
         'LOW': 0.3,
-        'MEDIUM': 0.6,
+        'MEDIUM': 0.5,
         'HIGH': 0.8
     }
     lr_prob = float(model_probs['lr'].item()) if isinstance(model_probs['lr'], np.ndarray) else float(model_probs['lr'])
